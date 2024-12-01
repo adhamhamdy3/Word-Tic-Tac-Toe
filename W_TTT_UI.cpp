@@ -4,6 +4,7 @@
 #include <QMessageBox>
 #include <QPushButton>
 #include <QtVirtualKeyboard>
+#include <QTimer>
 
 Word_Tic_Tac_Toe::Word_Tic_Tac_Toe(QWidget *parent)
     : QMainWindow(parent)
@@ -50,21 +51,19 @@ void Word_Tic_Tac_Toe::getPlayerInfo(){
 
     msgBox.setText("Choose your opponent type:");
     // QPushButton* aiButton = msgBox.addButton("AI Player", QMessageBox::ActionRole);
-    // QPushButton* randomButton = msgBox.addButton("Random Computer Player", QMessageBox::ActionRole);
+    QPushButton* randomButton = msgBox.addButton("Random Computer Player", QMessageBox::ActionRole);
     QPushButton* realButton = msgBox.addButton("Real Player", QMessageBox::ActionRole);
 
     msgBox.exec();
-
-    QChar player2Symbol;
 
     /*if (msgBox.clickedButton() == aiButton) {
         players[1] = new P_TTT_AI_Player<char>(player2Symbol.toLatin1());
         players[1]->setBoard(Board);
         nonHumanPlayerMode = true;
-    } else if (msgBox.clickedButton() == randomButton) {
-        players[1] = new P_TTT_Random_Player<char>(player2Symbol.toLatin1());
+    } else */if (msgBox.clickedButton() == randomButton) {
+        players[1] = new W_TTT_Random_Player<char>('O');
         nonHumanPlayerMode = true;
-    } else */if (msgBox.clickedButton() == realButton) {
+    } else if (msgBox.clickedButton() == realButton) {
         QString player2Name = QInputDialog::getText(this, "Player 2 Name", "Enter Player 2 name:", QLineEdit::Normal, "Player 2");
         if (player2Name.isEmpty()) player2Name = "Player 2";
 
@@ -121,6 +120,9 @@ void Word_Tic_Tac_Toe::on_W_TTT_Grid_cellDoubleClicked(int row, int column){
 
     if(!nonHumanPlayerMode) player2 ^= 1;
 
+    if(nonHumanPlayerMode)
+        nonHumanPlayerTurn(2000);
+
 }
 
 void Word_Tic_Tac_Toe::updateCell(QTableWidgetItem *item, const int& playerIndex, const int& row, const int& column){
@@ -164,4 +166,33 @@ void Word_Tic_Tac_Toe::updateState(){
 void Word_Tic_Tac_Toe::updateNoOfMovesLabel() const{
     ui->noOfMovesLabel->setText("NUMBER OF MOVES = " + QString::fromStdString(std::to_string(W_TTT_GAME->boardPtr->n_moves)));
 
+}
+
+void Word_Tic_Tac_Toe::executeNonHumanPlayerTurn(){
+    player1 = false;
+
+    int x, y;
+    players[1]->getmove(x, y);
+
+    while(!W_TTT_GAME->boardPtr->update_board(x, y, players[1]->getsymbol())){
+        players[1]->getmove(x, y);
+    }
+
+    QTableWidgetItem *item = ui->W_TTT_Grid->item(x, y);
+
+    updateCell(item, 1, x, y);
+
+    isGameIsOver();
+
+    player1 = true;
+
+    updateState();
+
+    ui->W_TTT_Grid->setEnabled(!gameOver);
+}
+
+
+void Word_Tic_Tac_Toe::nonHumanPlayerTurn(const int & delay){
+    ui->W_TTT_Grid->setEnabled(false);
+    QTimer::singleShot(delay, this, &Word_Tic_Tac_Toe::executeNonHumanPlayerTurn);
 }

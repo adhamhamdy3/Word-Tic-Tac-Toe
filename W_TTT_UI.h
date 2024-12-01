@@ -45,5 +45,9 @@ private:
 
     void updateState();
     void updateNoOfMovesLabel() const;
+
+    void executeNonHumanPlayerTurn();
+
+    void nonHumanPlayerTurn(const int&);
 };
 #endif // W_TTT_UI_H
