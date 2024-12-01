@@ -11,7 +11,7 @@ TouchKeyboardDialog::TouchKeyboardDialog(QWidget *parent)
 void TouchKeyboardDialog::createKeyboard() {
     QGridLayout *gridLayout = new QGridLayout(this);
 
-    QString keys = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    QString keys = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
     int row = 0, col = 0;
 

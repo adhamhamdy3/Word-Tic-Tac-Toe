@@ -6,6 +6,9 @@
 #include <map>
 #include <fstream>
 
+class Word_Tic_Tac_Toe;
+
+
 /*--------------------------------Word_TicTacToe_Board Class--------------------------------*/
 template<typename type>
 class Word_TicTacToe_Board : public Board<type>{
@@ -77,8 +80,8 @@ bool Word_TicTacToe_Board<type>::is_win() {
     // Check rows
     for (int i = 0; i < this->rows; i++) {
         string row = string(1, this->board[i][0]) +
-                          string(1, this->board[i][1]) +
-                          string(1, this->board[i][2]);
+                     string(1, this->board[i][1]) +
+                     string(1, this->board[i][2]);
         if (validWords[row])
             return true;
     }
@@ -177,6 +180,8 @@ public:
     char newRandomLetter;
     W_TTT_Random_Player(const type& letter);
     void getmove(int& x, int& y) override;
+
+    friend class Word_Tic_Tac_Toe;
 };
 
 // Random Player Constructor
@@ -204,6 +209,8 @@ public:
     char newLetter;
     W_TTT_Player(string n, type letter);
     void getmove(int& x, int& y) override;
+
+    friend class Word_Tic_Tac_Toe;
 };
 
 

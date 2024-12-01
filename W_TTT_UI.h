@@ -1,10 +1,11 @@
-#ifndef WORD_TIC_TAC_TOE_H
-#define WORD_TIC_TAC_TOE_H
+#ifndef W_TTT_UI_H
+#define W_TTT_UI_H
 
 #include <QMainWindow>
 #include "BoardGame_Classes.h"
 #include "Word_TicTacToe.h"
 #include "touchkeyboarddialog.h"
+#include <QTableWidgetItem>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -32,12 +33,17 @@ private:
 private:
     bool player1, player2;
 
-    bool nonHumanPlayer;
+    bool nonHumanPlayerMode;
     bool gameOver;
 
     void getPlayerInfo();
     QChar getSymbol(const QString&);
 
-    void updateCellCharacter(int row, int column, QChar character);
+    void updateCell(QTableWidgetItem *item, const int& playerIndex, const int& row, const int& column);
+
+    void isGameIsOver();
+
+    void updateState();
+    void updateNoOfMovesLabel() const;
 };
-#endif // WORD_TIC_TAC_TOE_H
+#endif // W_TTT_UI_H

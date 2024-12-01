@@ -17,9 +17,9 @@ find_package(Qt6 REQUIRED COMPONENTS Widgets VirtualKeyboard)
 
 set(PROJECT_SOURCES
         main.cpp
-        word_tic_tac_toe.cpp
-        word_tic_tac_toe.h
-        word_tic_tac_toe.ui
+        W_TTT_UI.cpp
+        W_TTT_UI.h
+        W_TTT_UI.ui
         include/BoardGame_Classes.h
         include/Word_TicTacToe.h
         include/touchkeyboarddialog.h

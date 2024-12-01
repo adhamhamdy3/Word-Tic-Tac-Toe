@@ -4,7 +4,7 @@
 #include <string>
 using namespace std;
 
-class MainWindow;
+class Word_Tic_Tac_Toe;
 
 template <typename T>
 class Board {
@@ -33,7 +33,7 @@ public:
 
     virtual void resetBoard() = 0;
 
-    friend class MainWindow;
+    friend class Word_Tic_Tac_Toe;
 };
 
 template <typename T>
@@ -57,7 +57,7 @@ public:
 
     virtual ~Player() = default;
 
-    friend class MainWindow;
+    friend class Word_Tic_Tac_Toe;
 
 };
 
@@ -85,7 +85,7 @@ public:
     ~GameManager();
     void run();
 
-    friend class MainWindow;
+    friend class Word_Tic_Tac_Toe;
 };
 
 

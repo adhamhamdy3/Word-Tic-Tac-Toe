@@ -1,4 +1,4 @@
-#include "word_tic_tac_toe.h"
+#include "W_TTT_UI.h"
 
 #include <QApplication>
 #include <QtGui/QGuiApplication>
