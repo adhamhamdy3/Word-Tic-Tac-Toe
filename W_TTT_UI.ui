@@ -32,7 +32,7 @@
    <string>Word_Tic_Tac_Toe</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>190</x>
@@ -46,6 +46,12 @@
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
         <widget class="QLabel" name="noOfMovesLabel">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>39</height>
+          </size>
+         </property>
          <property name="font">
           <font>
            <family>outrun future</family>
@@ -73,6 +79,12 @@
            <width>580</width>
            <height>550</height>
           </size>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::Shape::Box</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Shadow::Sunken</enum>
          </property>
          <property name="gridStyle">
           <enum>Qt::PenStyle::SolidLine</enum>
@@ -328,6 +340,19 @@
      </item>
     </layout>
    </widget>
+   <widget class="QPushButton" name="pushButton">
+    <property name="geometry">
+     <rect>
+      <x>810</x>
+      <y>260</y>
+      <width>75</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>PushButton</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -342,5 +367,22 @@
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>Word_Tic_Tac_Toe</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>861</x>
+     <y>298</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>859</x>
+     <y>368</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

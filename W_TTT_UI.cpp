@@ -195,4 +195,5 @@ void Word_Tic_Tac_Toe::executeNonHumanPlayerTurn(){
 void Word_Tic_Tac_Toe::nonHumanPlayerTurn(const int & delay){
     ui->W_TTT_Grid->setEnabled(false);
     QTimer::singleShot(delay, this, &Word_Tic_Tac_Toe::executeNonHumanPlayerTurn);
+    updateNoOfMovesLabel();
 }
