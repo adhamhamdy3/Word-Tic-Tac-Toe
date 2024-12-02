@@ -13,7 +13,6 @@ include_directories(include)
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
-find_package(Qt6 REQUIRED COMPONENTS Widgets VirtualKeyboard)
 
 set(PROJECT_SOURCES
         main.cpp
@@ -50,7 +49,6 @@ else()
 endif()
 
 target_link_libraries(Word-Tic-Tac-Toe PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::Widgets Qt6::VirtualKeyboard)
 
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
@@ -67,7 +65,6 @@ set_target_properties(Word-Tic-Tac-Toe PROPERTIES
     WIN32_EXECUTABLE TRUE
 )
 
-add_definitions(-DQT_IM_MODULE=qtvirtualkeyboard)
 
 include(GNUInstallDirs)
 install(TARGETS Word-Tic-Tac-Toe
