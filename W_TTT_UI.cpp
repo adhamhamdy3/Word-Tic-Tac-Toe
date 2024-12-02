@@ -3,7 +3,6 @@
 #include <QInputDialog>
 #include <QMessageBox>
 #include <QPushButton>
-#include <QtVirtualKeyboard>
 #include <QTimer>
 
 Word_Tic_Tac_Toe::Word_Tic_Tac_Toe(QWidget *parent)
