@@ -24,7 +24,7 @@ public:
     bool is_draw() override;
     bool game_is_over() override;
     void cleanUp();
-    void resetBoard() override;
+    void resetBoard();
 };
 
 // Word TTT Constructor

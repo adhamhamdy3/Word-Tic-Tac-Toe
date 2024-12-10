@@ -21,12 +21,11 @@ Word_Tic_Tac_Toe::Word_Tic_Tac_Toe(QWidget *parent)
 
     getPlayerInfo();
 
-    W_TTT_GAME = new GameManager<char>(Board, players);
+    initGrid();
 
     updateNoOfMovesLabel();
 
-    ui->state1Label->setText("State: YOUR TURN!");
-    ui->state2Label->setText("State: Waiting...");
+    updateState();
 }
 
 Word_Tic_Tac_Toe::~Word_Tic_Tac_Toe()
@@ -36,8 +35,26 @@ Word_Tic_Tac_Toe::~Word_Tic_Tac_Toe()
     if (players[0]) delete players[0];
     if (players[1]) delete players[1];
     if (Board) delete Board;
+}
 
-    delete W_TTT_GAME;
+void Word_Tic_Tac_Toe::initGrid(){
+    ui->W_TTT_Grid->clearContents();
+    ui->W_TTT_Grid->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    ui->W_TTT_Grid->setSelectionMode(QAbstractItemView::NoSelection);
+
+
+    for (int row = 0; row < ui->W_TTT_Grid->rowCount(); ++row) {
+        for (int col = 0; col < ui->W_TTT_Grid->columnCount(); ++col) {
+
+            QTableWidgetItem *item = new QTableWidgetItem();
+            item->setFlags(Qt::ItemIsEnabled);
+            item->setBackground(QColorConstants::Svg::aliceblue);
+            item->setTextAlignment(Qt::AlignCenter);
+            item->setForeground(Qt::white);
+            ui->W_TTT_Grid->setItem(row, col, item);
+        }
+    }
+    ui->W_TTT_Grid->setEnabled(true);
 }
 
 void Word_Tic_Tac_Toe::getPlayerInfo(){
@@ -98,12 +115,12 @@ void Word_Tic_Tac_Toe::on_W_TTT_Grid_cellDoubleClicked(int row, int column){
 
     if (player1) {
         players[0]->symbol = selectedChar.toLatin1();
-        W_TTT_GAME->boardPtr->update_board(row, column, players[0]->getsymbol());
+        Board->update_board(row, column, players[0]->getsymbol());
         updateCell(item, 0, row, column);
 
     } else if (player2) {
         players[1]->symbol = selectedChar.toLatin1();
-        W_TTT_GAME->boardPtr->update_board(row, column, players[1]->getsymbol());
+        Board->update_board(row, column, players[1]->getsymbol());
         updateCell(item, 1, row, column);
     }
 
@@ -115,7 +132,7 @@ void Word_Tic_Tac_Toe::on_W_TTT_Grid_cellDoubleClicked(int row, int column){
 
     player1 ^= 1;
 
-    updateState(); // toggle player1 ^= 1
+    updateState();
 
     if(!nonHumanPlayerMode) player2 ^= 1;
 
@@ -127,7 +144,7 @@ void Word_Tic_Tac_Toe::on_W_TTT_Grid_cellDoubleClicked(int row, int column){
 void Word_Tic_Tac_Toe::updateCell(QTableWidgetItem *item, const int& playerIndex, const int& row, const int& column){
     item->setText(QString::fromStdString(std::string(1, players[playerIndex]->getsymbol())));
     item->setTextAlignment(Qt::AlignCenter);
-    item->setFont(QFont("Outrun future", 30, QFont::Bold));
+    item->setFont(QFont("Outrun future", 45, QFont::Bold));
     if(!playerIndex) item->setBackground(Qt::blue);
     else item->setBackground(Qt::red);
     item->setForeground(Qt::white);
@@ -136,18 +153,51 @@ void Word_Tic_Tac_Toe::updateCell(QTableWidgetItem *item, const int& playerIndex
 
 }
 
+void Word_Tic_Tac_Toe::playAgain(){
+    Board->resetBoard();
+
+    player1 = true, player2 = false, gameOver = false;
+    nonHumanPlayerMode = false;
+
+    getPlayerInfo();
+
+    initGrid();
+
+    updateNoOfMovesLabel();
+
+    updateState();
+}
 
 void Word_Tic_Tac_Toe::isGameIsOver(){
-    if (W_TTT_GAME->boardPtr->game_is_over()) {
-        if (W_TTT_GAME->boardPtr->is_win()) {
+    if (Board->game_is_over()) {
+        QString msg;
+        if (Board->is_win()) {
             if (player1)
-                QMessageBox::information(this, "Win!", QString::fromStdString(players[0]->getname()) + " has won.");
+                msg = QString::fromStdString(players[0]->getname() + " has won.");
             else
-                QMessageBox::information(this, "Win!", QString::fromStdString(players[1]->getname()) + " has won.");
-        } else if (W_TTT_GAME->boardPtr->is_draw()) {
-            QMessageBox::information(this, "Draw!", "The match ended with a draw.");
+                msg = QString::fromStdString(players[1]->getname() + " has won.");
+        } else if (Board->is_draw()) {
+            msg = "The match ended with a draw.";
         }
-        gameOver = true;
+
+        QMessageBox msgBox(this);
+        msgBox.setWindowTitle("Game Over!");
+        msgBox.setText(msg);
+        msgBox.setIcon(QMessageBox::Information);
+
+        QPushButton* playAgainButton = msgBox.addButton("Play Again", QMessageBox::AcceptRole);
+        QPushButton* quitButton = msgBox.addButton("Quit", QMessageBox::RejectRole);
+
+
+        msgBox.exec();
+
+        if(msgBox.clickedButton() == playAgainButton){
+            playAgain();
+        } else if (msgBox.clickedButton() == quitButton) {
+            QApplication::quit();
+        } else if (msgBox.clickedButton() == nullptr){
+            gameOver = true;
+        }
     }
 }
 
@@ -163,7 +213,7 @@ void Word_Tic_Tac_Toe::updateState(){
 }
 
 void Word_Tic_Tac_Toe::updateNoOfMovesLabel() const{
-    ui->noOfMovesLabel->setText("NUMBER OF MOVES = " + QString::fromStdString(std::to_string(W_TTT_GAME->boardPtr->n_moves)));
+    ui->noOfMovesLabel->setText("NUMBER OF MOVES = " + QString::fromStdString(std::to_string(Board->n_moves)));
 
 }
 
@@ -173,7 +223,7 @@ void Word_Tic_Tac_Toe::executeNonHumanPlayerTurn(){
     int x, y;
     players[1]->getmove(x, y);
 
-    while(!W_TTT_GAME->boardPtr->update_board(x, y, players[1]->getsymbol())){
+    while(!Board->update_board(x, y, players[1]->getsymbol())){
         players[1]->getmove(x, y);
     }
 

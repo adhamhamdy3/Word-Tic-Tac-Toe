@@ -31,8 +31,6 @@ public:
     /// Return true if the game is over
     virtual bool game_is_over() = 0;
 
-    virtual void resetBoard() = 0;
-
     friend class Word_Tic_Tac_Toe;
 };
 

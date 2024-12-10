@@ -49,5 +49,9 @@ private:
     void executeNonHumanPlayerTurn();
 
     void nonHumanPlayerTurn(const int&);
+
+    void initGrid();
+
+    void playAgain();
 };
 #endif // W_TTT_UI_H
