@@ -10,15 +10,16 @@ class Word_Tic_Tac_Toe;
 
 
 /*--------------------------------Word_TicTacToe_Board Class--------------------------------*/
-template<typename type>
-class Word_TicTacToe_Board : public Board<type>{
+template<typename T>
+class Word_TicTacToe_Board : public Board<T>{
 private:
     void initBoard();
     map<string, bool> validWords;
 public:
+    static constexpr T EMPTY = T();
     Word_TicTacToe_Board();
     ~Word_TicTacToe_Board();
-    bool update_board(const int& x, const int& y, const type& letter) override;
+    bool update_board(const int& x, const int& y, const T& letter) override;
     void display_board() override;
     bool is_win() override;
     bool is_draw() override;
@@ -28,8 +29,8 @@ public:
 };
 
 // Word TTT Constructor
-template<typename type>
-Word_TicTacToe_Board<type>::Word_TicTacToe_Board() {
+template<typename T>
+Word_TicTacToe_Board<T>::Word_TicTacToe_Board() {
     this->rows = 3;
     this->columns = 3;
     this->n_moves = 0;
@@ -38,18 +39,18 @@ Word_TicTacToe_Board<type>::Word_TicTacToe_Board() {
 }
 
 // Word TTT Destructor
-template<typename type>
-Word_TicTacToe_Board<type>::~Word_TicTacToe_Board() {
+template<typename T>
+Word_TicTacToe_Board<T>::~Word_TicTacToe_Board() {
     this->cleanUp();
 }
 
 // update_board Function
-template<typename type>
-bool Word_TicTacToe_Board<type>::update_board(const int& x, const int& y, const type& letter) {
-    if(!(x < 0 || x >= this->rows || y < 0 || y >= this->columns) && (this->board[x][y] == ' ' || letter == ' ')){
-        if (letter == ' '){
+template<typename T>
+bool Word_TicTacToe_Board<T>::update_board(const int& x, const int& y, const T& letter) {
+    if(!(x < 0 || x >= this->rows || y < 0 || y >= this->columns) && (this->board[x][y] == Word_TicTacToe_Board<T>::EMPTY || letter == Word_TicTacToe_Board<T>::EMPTY)){
+        if (letter == Word_TicTacToe_Board<T>::EMPTY){
             this->n_moves--;
-            this->board[x][y] = ' ';
+            this->board[x][y] = Word_TicTacToe_Board<T>::EMPTY;
         }
         else {
             this->n_moves++;
@@ -61,8 +62,8 @@ bool Word_TicTacToe_Board<type>::update_board(const int& x, const int& y, const 
 }
 
 // display_board Function
-template<typename type>
-void Word_TicTacToe_Board<type>::display_board() {
+template<typename T>
+void Word_TicTacToe_Board<T>::display_board() {
     for (int i = 0; i < this->rows; i++) {
         cout << "\n| ";
         for (int j = 0; j < this->columns; j++) {
@@ -75,8 +76,8 @@ void Word_TicTacToe_Board<type>::display_board() {
 }
 
 // is_win Function
-template<typename type>
-bool Word_TicTacToe_Board<type>::is_win() {
+template<typename T>
+bool Word_TicTacToe_Board<T>::is_win() {
     // Check rows
     for (int i = 0; i < this->rows; i++) {
         string row = string(1, this->board[i][0]) +
@@ -108,22 +109,22 @@ bool Word_TicTacToe_Board<type>::is_win() {
 }
 
 // is_draw Function
-template<typename type>
-bool Word_TicTacToe_Board<type>::is_draw() {
+template<typename T>
+bool Word_TicTacToe_Board<T>::is_draw() {
     return (this->n_moves == 9 && !this->is_win());
 }
 
 
 // game_is_over Function
-template<typename type>
-bool Word_TicTacToe_Board<type>::game_is_over()  {
+template<typename T>
+bool Word_TicTacToe_Board<T>::game_is_over()  {
     return (this->is_win() || this->is_draw());
 }
 
 
 // cleanUp Function
-template<typename type>
-void Word_TicTacToe_Board<type>::cleanUp() {
+template<typename T>
+void Word_TicTacToe_Board<T>::cleanUp() {
     if (this->board) {
         for (int i = 0; i < this->rows; ++i) {
             delete[] this->board[i];
@@ -137,23 +138,23 @@ void Word_TicTacToe_Board<type>::cleanUp() {
 
 
 // resetBoard Function
-template<typename type>
-void Word_TicTacToe_Board<type>::resetBoard(){
+template<typename T>
+void Word_TicTacToe_Board<T>::resetBoard(){
     this->cleanUp();
     this->initBoard();
 }
 
 // initBoard Function
-template<typename type>
-void Word_TicTacToe_Board<type>::initBoard(){
-    this->board = new char*[this->rows];
+template<typename T>
+void Word_TicTacToe_Board<T>::initBoard(){
+    this->board = new T*[this->rows];
 
     for (int i = 0; i < this->rows; ++i) {
 
-        this->board[i] = new char[this->columns];
+        this->board[i] = new T[this->columns];
 
         for (int j = 0; j < this->columns; ++j) {
-            this->board[i][j] = ' ';
+            this->board[i][j] = Word_TicTacToe_Board<T>::EMPTY;
         }
     }
 
@@ -174,19 +175,19 @@ void Word_TicTacToe_Board<type>::initBoard(){
 
 /// Random Player Class
 
-template<typename type>
-class W_TTT_Random_Player : public RandomPlayer<type>{
+template<typename T>
+class W_TTT_Random_Player : public RandomPlayer<T>{
 public:
-    char newRandomLetter;
-    W_TTT_Random_Player(const type& letter);
+    T newRandomLetter;
+    W_TTT_Random_Player(const T& letter);
     void getmove(int& x, int& y) override;
 
     friend class Word_Tic_Tac_Toe;
 };
 
 // Random Player Constructor
-template<typename type>
-W_TTT_Random_Player<type>::W_TTT_Random_Player(const type &letter) : RandomPlayer<type>(letter) {
+template<typename T>
+W_TTT_Random_Player<T>::W_TTT_Random_Player(const T &letter) : RandomPlayer<T>(letter) {
     this->dimension = 3;
     this->name = "Random Computer Player";
     srand(static_cast<unsigned int>(time(0)));
@@ -194,8 +195,8 @@ W_TTT_Random_Player<type>::W_TTT_Random_Player(const type &letter) : RandomPlaye
 
 
 // getmove Function [Random Player]
-template<typename type>
-void W_TTT_Random_Player<type>::getmove(int &x, int &y) {
+template<typename T>
+void W_TTT_Random_Player<T>::getmove(int &x, int &y) {
     x = rand() % 3;
     y = rand() % 3;
     this->symbol = 'A' + (rand() % 26);
@@ -203,11 +204,11 @@ void W_TTT_Random_Player<type>::getmove(int &x, int &y) {
 
 /*--------------------------------Player Class--------------------------------*/
 /// Player class
-template<typename type>
-class W_TTT_Player : public Player<type>{
+template<typename T>
+class W_TTT_Player : public Player<T>{
 public:
-    char newLetter;
-    W_TTT_Player(string n, type letter);
+    T newLetter;
+    W_TTT_Player(string n, T letter);
     void getmove(int& x, int& y) override;
 
     friend class Word_Tic_Tac_Toe;
@@ -215,12 +216,12 @@ public:
 
 
 // Normal Player Constructor
-template<typename type>
-W_TTT_Player<type>::W_TTT_Player(string n, type letter) : Player<type>(n, letter) {}
+template<typename T>
+W_TTT_Player<T>::W_TTT_Player(string n, T letter) : Player<T>(n, letter) {}
 
 // getmove Function [Normal Player]
-template<typename type>
-void W_TTT_Player<type>::getmove(int &x, int &y) {
+template<typename T>
+void W_TTT_Player<T>::getmove(int &x, int &y) {
     cout << "\nEnter your letter:";
     cin >> this->symbol;
     cout << "\nPlease enter your X Y coordenates (0 to 2) separated by spaces: ";
