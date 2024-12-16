@@ -11,6 +11,13 @@ Word_Tic_Tac_Toe::Word_Tic_Tac_Toe(QWidget *parent)
 {
     ui->setupUi(this);
 
+    this->setStyleSheet("background-color: #263238; color: #ECEFF1");
+
+
+    ui->W_TTT_Grid->setStyleSheet("background-color: #37474F; "
+                                  "gridline-color: #546E7A; "
+                                  "border: 1px solid #546E7A;");
+
     player1 = true;
     player2 = false;
 
@@ -137,7 +144,7 @@ void Word_Tic_Tac_Toe::on_W_TTT_Grid_cellDoubleClicked(int row, int column){
     if(!nonHumanPlayerMode) player2 ^= 1;
 
     if(nonHumanPlayerMode)
-        nonHumanPlayerTurn(2000);
+        nonHumanPlayerTurn(750);
 
 }
 
